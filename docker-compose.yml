@@ -1,0 +1,18 @@
+#Docker compose
+version: '2'
+services:
+  postgres:
+    image: postgres:9.4
+    #Uncomment this line if you'd like the data to persist
+    #volumes:
+    #  - /var/lib/postgresql/data
+    ports:
+      - "5432"
+  ldap:
+    build: ldap/
+    ports:
+      - "389:389"
+    links:
+      - postgres:postgres
+    depends_on:
+      - postgres
