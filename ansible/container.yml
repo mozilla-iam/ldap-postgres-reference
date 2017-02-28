@@ -1,5 +1,8 @@
-#Docker compose
-version: '2'
+#Ansible container manifest for building the ldap lab
+version: '1'
+defaults:
+  database_password:     'changemechangemechangeme'
+  ldap_admin_password:   'changemechangemechangeme'
 services:
   postgres:
     image: postgres:9.4
@@ -8,6 +11,10 @@ services:
     #  - /var/lib/postgresql/data
     ports:
       - "5432"
+    environment:
+      POSTGRESQL_USER: 'pg_ldap_user'
+      POSTGRESQL_PASSWORD: '{{ database_password }}'
+      POSTGRESQL_DATABASE: 'pg_ldap'
   ldap:
     image: centos:7
     command: /root/entrypoint.sh
@@ -15,3 +22,5 @@ services:
       - "389:389"
     links:
       - postgres:postgres
+    environment:
+      PGPASSWORD: {{ database_password }}
