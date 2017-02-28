@@ -1,0 +1,37 @@
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: {{ lookup('password', 'credentials/' + client + '/' + tier + '/' + role + '/mysqlpassword length=15') }}
+
+
+
+- hosts: ldap
+  gather_facts: no
+
+  tasks:
+    - name: Install convinience packages
+      yum: name=vim,epel-release state=latest
+
+    - name: Install ldap packages
+      yum: name=openldap,openldap-servers-sql state=latest
+
+    - name: Install odbc
+      yum: name=unixODBC state=latest
+
+    - name: Install Postgres Client
+      yum: name=postgresql-odbc state=latest
+
+    - name: Add the ODBC.ini
+      copy: src=../ldap/odbc.ini dest=/etc/odbc.ini owner=root group=root mode=0664
+
+    - name: Add the backsql-script
+      copy: src=../ldap/backsql_create.sql dest=/root/backsql_create.sql owner=root group=root mode=0664
+
+    - name: Add the slapd.conf
+      copy: src=../ldap/slapd.conf dest=/etc/openldap/slapd.conf owner=root group=root mode=0664
+
+    - name: Create the openldap pid folder
+      file: path=/usr/local/var state=directory owner=root group=root mode=0775
+
+    - name: Add the entrypoint
+      copy: src=../ldap/entrypoint.sh dest=/root/entrypoint.sh owner=root group=root mode=0774
