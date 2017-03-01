@@ -1,9 +1,18 @@
+- hosts: postgres
+  gather_facts: no
+
+  tasks:
+    - name: Create the entrypoint folder
+      file: path=/docker-entrypoint-initdb.d state=directory owner=root group=root mode=0775
+
+    - name: Place user db init script
+      template: src=../postgres/init-user-db.sh.j2 dest=/docker-entrypoint-initdb.d/init-user-db.sh owner=postgres group=postgres mode=0664
+
 - hosts: ldap
   gather_facts: no
 
-  vars:
-    database_password: 'changemechangemechangeme'
-    ldap_admin_password: 'changemechangemechangeme'
+  vars_files:
+    - vars.yml
 
   tasks:
     - name: Install convinience packages
@@ -18,14 +27,14 @@
     - name: Install Postgres Client
       yum: name=postgresql-odbc,postgresql state=latest
 
-    - name: Add the ODBC.ini
-      template: src=../ldap/odbc.ini.j2 dest=/etc/odbc.ini owner=root group=root mode=0664
-
     - name: Add the backsql-script
       copy: src=../ldap/backsql_create.sql dest=/root/backsql_create.sql owner=root group=root mode=0664
 
+    - name: Add the ODBC.ini
+      template: src=../ldap/odbc.ini.j2 dest=/etc/odbc.ini owner=root group=root mode=0664
+
     - name: Add the slapd.conf
-      template: src=../ldap/slapd.conf dest=/etc/openldap/slapd.conf.j2 owner=root group=root mode=0664
+      template: src=../ldap/slapd.conf.j2 dest=/etc/openldap/slapd.conf owner=root group=root mode=0664
 
     - name: Create the openldap pid folder
       file: path=/usr/local/var state=directory owner=root group=root mode=0775

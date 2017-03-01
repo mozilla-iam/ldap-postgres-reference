@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo "Sleeping to allow postgres time to get ready. \n"
+echo "Sleeping to allow postgres time to get ready."
 sleep 10
 
-createdb -U pg_ldap_user -h postgres pg_ldap
-psql -U pg_ldap_user -h postgres pg_ldap < backsql_create.sql
+createdb -U postgres -h postgres ldap
+psql -U postgres -h postgres ldap < /root/backsql_create.sql
 slapd -d 1 -f /etc/openldap/slapd.conf
