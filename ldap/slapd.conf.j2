@@ -36,6 +36,8 @@ suffix         "dc=allizom,dc=moc"
 rootdn         "cn=root,dc=allizom,dc=moc"
 rootpw          {{ ldap_admin_password }}
 dbname          PgSQL
+dbuser          postgres
+dbpasswd        postgres
 insentry_stmt  "insert into ldap_entries (id,dn,oc_map_id,parent,keyval) values ((select max(id)+1 from ldap_entries),?,?,?,?)"
 upper_func      "upper"
 strcast_func    "text"

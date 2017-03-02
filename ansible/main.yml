@@ -1,13 +1,6 @@
 - hosts: postgres
   gather_facts: no
 
-  tasks:
-    - name: Create the entrypoint folder
-      file: path=/docker-entrypoint-initdb.d state=directory owner=root group=root mode=0775
-
-    - name: Place user db init script
-      template: src=../postgres/init-user-db.sh.j2 dest=/docker-entrypoint-initdb.d/init-user-db.sh owner=postgres group=postgres mode=0664
-
 - hosts: ldap
   gather_facts: no
 
