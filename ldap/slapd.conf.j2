@@ -11,7 +11,7 @@ include        /etc/openldap/schema/inetorgperson.schema
 access to *
         by self write
         by * read
-access to * by dn="cn=root,dc=allizom,dc=moc" write
+access to * by dn="cn=root,{{ ldap_base }}" write
 
 # Do not enable referrals until AFTER you have a working directory
 # service AND an understanding of referrals.
@@ -32,8 +32,8 @@ moduleload back_sql.la
 #######################################################################
 
 database        sql
-suffix         "dc=allizom,dc=moc"
-rootdn         "cn=root,dc=allizom,dc=moc"
+suffix         "{{ ldap_base }}"
+rootdn         "cn=root,{{ ldap_base }}"
 rootpw          {{ ldap_admin_password }}
 dbname          PgSQL
 dbuser          postgres
