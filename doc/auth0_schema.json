@@ -1,0 +1,43 @@
+{
+	"family_name": "Doe",
+	"given_name": "John",
+	"nickname": "John Doe",
+	"groups": [
+		"staff"
+	],
+	"emails": [
+		"jdoe@mozilla.com",
+		"1337@mozilla.com"
+	],
+	"dn": "mail=jdoe@mozilla.com,o=com,dc=mozilla",
+	"organizationUnits": "mail=jdoe@mozilla.com,o=com,dc=mozilla",
+	"email_aliases": [
+		"jdoe@mozilla.com",
+		"1337@mozilla.com"
+    ],
+    "email_verified": true,
+    "email": "jdoe@mozilla.com",
+    "updated_at": "2017-03-09T21:28:51.851Z",
+    "name": "jdoe@mozilla.com",
+    "picture": "https://s.gravatar.com/avatar/...png",
+    "user_id": "ad|Mozilla-LDAP|jdoe",
+    "identities": [
+	    {
+		    "user_id": "Mozilla-LDAP|jdoe",
+		    "provider": "ad",
+		    "connection": "Mozilla-LDAP",
+		    "isSocial": false
+	    }
+    ],
+    "created_at": "2017-02-11T00:29:11.610Z",
+    "user_metadata": {
+    },
+    "multifactor": [
+	    "duo"
+    ],
+    "last_ip": "127.1.1.1",
+    "last_login": "2017-03-09T21:28:51.851Z",
+    "logins_count": 1337,
+    "blocked_for": [],
+    "guardian_enrollments": []
+}

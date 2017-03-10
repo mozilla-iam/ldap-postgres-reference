@@ -1,0 +1,30 @@
+{
+"Report_Entry": [{
+   "LastName": "Doe",
+   "Preferred_Name": "John Doe",
+   "PreferredFirstName": "John",
+   "Preferred_Name_-_Last_Name": "Doe",
+   "LegalFirstName": "John",
+   "EmployeeID": "1337",
+   "IsManager": "FALSE",
+   "isDirectorOrAbove": "FALSE",
+   "HireDate": "2017-01-01",
+   "CurrentlyActive": "1",
+   "Entity": "Mozilla Corporation USA",
+   "Team": "Enterprise Information Security",
+   "Cost_Center": "1337 - An Elite Cost Center",
+   "Cost_Center_Hierarchy": "IT",
+   "WorkerType": "Employee",
+   "DetailedWorkerType": "Regular",
+   "LocationDescription": "San Francisco Office",
+   "Time_Zone": "GMT-08:00 Pacific Time (Los Angeles)",
+   "LocationCity": "San Francisco",
+   "LocationCountryFull": "United States",
+   "LocationCountryISO2": "USA",
+   "WorkersManager": "Jill Doe",
+   "WorkersManagersEmployeeID": "31337",
+   "PrimaryWorkEmail": "jdoe@mozilla.com",
+   "WPRDeskNumber": "1337",
+   "PublicEmailAddresses": [{"PublicEmailAddress": "jdoe@mozilla.com"}]
+}]
+}
