@@ -1,0 +1,43 @@
+{
+	"user_id": "31337xxxx|unique",
+	"timezone": "America/Los_Angeles",
+	"active": true,
+	"lastModified": "2017-03-09T21:28:51.851Z",
+	"created": "2017-03-09T21:28:51.851Z",
+	"identities": [
+		{
+			"username": "jdoe",
+			"displayname": "john doe",
+			"firstname": "john",
+			"lastname": "doe",
+			"emails": [
+				"jdoe@mozilla.com",
+				"31337@mozilla.com"
+			],
+			"phonenumbers": {
+				"France": "+33169288888",
+				"USA": "+14155701111"
+			},
+			"uris": {
+				"Blog": "https://www.insecure.ws",
+				"IRC":"irc://irc.mozilla.org/jdoe",
+				"Mozillian": "https://mozillians.org/en-US/u/jdoe/"
+			},
+			"Fingerprints": {
+				"ssh": "4096 SHA256:rlhYcDi2e98sekBwu9aaPEmr3xsg1CsS1tGXksSTSIg test (RSA)",
+				"pgp": "0x61AB87D6F66CE2FCD2D2E1F56A65DFA844722517"
+			},
+			"picture": "https://s.gravatar.com/avatar/...png",
+			"shirtSize": "L"
+		},
+		{
+			"userName": "jdoe",
+			"displayName": "Jill Doe",
+			"firstName": "Jill",
+			"lastName": "Doe",
+			"emails": [
+				"jidoe@gmail.com"
+			]
+		}
+	]
+}
