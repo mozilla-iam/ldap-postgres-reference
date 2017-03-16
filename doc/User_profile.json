@@ -12,31 +12,65 @@
 	"emails": {
 		"jdoe@mozilla.com": {
 			"primary": true,
-			"verified": true
+			"verified": true,
+			"name": "work"
 		},
 		"31337@mozilla.com": {
 			"primary": false,
-			"verified": true
+			"verified": true,
+			"name": "work-funny"
 		}
 	},
 	"phoneNumbers": {
-		"My mobile": "+33169288888",
-		"USA Home": "+14155701111"
+		"+33169288888": {
+			"primary": false,
+			"verified": false,
+			"name": "My French mobile phone"
+		},
+		"+14155701111": {
+			"primary": false,
+			"verified": false,
+			"name": "USA landline"
+		}
 	},
 	"uris": {
-		"Blog": "https://www.insecure.ws",
-		"Mozillian": "https://mozillians.org/en-US/u/jdoe/"
+		"https://www.insecure.ws": {
+			"primary": true,
+			"verified": false,
+			"name": "Blog"
+		},
+		"https://mozillians.org/en-US/u/jdoe/": {
+			"primary": false,
+			"verified": true,
+			"name": "Mozillian profile"
+		},
+		"https://keybase.io/joe/": {
+			"primary": false,
+			"verified": true,
+			"name": "Keybase"
+		}
 	},
 	"nicknames": {
-		"IRC": "jdoe"
+		"jdoe": {
+			"primary": true,
+			"verified": false,
+			"name": "Mozilla IRC"
+		}
 	},
 	"SSHFingerprints": {
-		"Mozilla laptop": "4096 SHA256:rlhYcDi2e98sekBwu9aaPEmr3xsg1CsS1tGXksSTSIg test (RSA)"
+		"4096 SHA256:rlhYcDi2e98sekBwu9aaPEmr3xsg1CsS1tGXksSTSIg test (RSA)": {
+			"primary": true,
+			"verified": false,
+			"name": "Mozilla SSH"
+		}
 	},
 	"PGPFingerprints": {
-		"Mozilla": "0x61AB87D6F66CE2FCD2D2E1F56A65DFA844722517"
+		"0x61AB87D6F66CE2FCD2D2E1F56A65DFA844722517": {
+			"primary": true,
+			"verified": false,
+			"name": "Mozilla PGP"
+		}
 	},
 	"picture": "https://s.gravatar.com/avatar/...png",
 	"shirtSize": "L"
-	]
 }
