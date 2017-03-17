@@ -72,5 +72,26 @@
 		}
 	},
 	"picture": "https://s.gravatar.com/avatar/...png",
-	"shirtSize": "L"
+	"shirtSize": "L",
+	"accessControl": {
+		"MozillaCorporation": {
+			"Staff": {
+				"created": "2010-01-23T04:56:22Z",
+				"lastUsed": "2010-01-23T04:56:22Z",
+				"roles": [ "user" ]
+			},
+			"Infosec": {
+				"created": "2010-01-23T04:56:22Z",
+				"lastUsed": "2010-01-23T04:56:22Z",
+				"roles": [ "admin", "user", "developer"]
+			}
+		},
+		"Mozillian": {
+			"IAM": {
+				"created": "2010-01-23T04:56:22Z",
+				"lastUsed": "2010-01-23T04:56:22Z",
+				"roles": [ "user" ]
+			}
+		}
+	}
 }
