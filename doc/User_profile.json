@@ -79,7 +79,7 @@
 	],
 	"picture": "https://s.gravatar.com/avatar/...png",
 	"shirtSize": "L",
-	"membership": [
+	"membership": {
 		"MozillaCorporation": {
 			"Staff": {
 				"created": "2010-01-23T04:56:22Z",
@@ -112,5 +112,5 @@
 				"roles": [ "user" ]
 			}
 		}
-	]
+	}
 }
