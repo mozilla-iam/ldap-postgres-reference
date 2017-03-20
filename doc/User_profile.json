@@ -36,38 +36,42 @@
 		}
 	},
 	"uris": {
-		"https://www.insecure.ws": {
+		{
+			"value": "https://www.insecure.ws",
 			"primary": true,
 			"verified": false,
 			"name": "Blog"
 		},
-		"https://mozillians.org/en-US/u/jdoe/": {
-			"primary": false,
+		{
+			"value": "https://mozillians.org/en-US/u/jdoe/",
 			"verified": true,
 			"name": "Mozillian profile"
 		},
-		"https://keybase.io/joe/": {
-			"primary": false,
+		{
+			"value": "https://keybase.io/joe/",
 			"verified": true,
 			"name": "Keybase"
 		}
 	},
 	"nicknames": {
-		"jdoe": {
+		{
+			"value": "jdoe",
 			"primary": true,
 			"verified": false,
 			"name": "Mozilla IRC"
 		}
 	},
 	"SSHFingerprints": {
-		"4096 SHA256:rlhYcDi2e98sekBwu9aaPEmr3xsg1CsS1tGXksSTSIg test (RSA)": {
+		{
+			"value": "4096 SHA256:rlhYcDi2e98sekBwu9aaPEmr3xsg1CsS1tGXksSTSIg test (RSA)",
 			"primary": true,
 			"verified": false,
 			"name": "Mozilla SSH"
 		}
 	},
 	"PGPFingerprints": {
-		"0x61AB87D6F66CE2FCD2D2E1F56A65DFA844722517": {
+		{
+			"value": "0x61AB87D6F66CE2FCD2D2E1F56A65DFA844722517",
 			"primary": true,
 			"verified": false,
 			"name": "Mozilla PGP"
