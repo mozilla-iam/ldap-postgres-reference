@@ -79,7 +79,7 @@
 	},
 	"picture": "https://s.gravatar.com/avatar/...png",
 	"shirtSize": "L",
-	"accessControl": {
+	"membership": {
 		"MozillaCorporation": {
 			"Staff": {
 				"created": "2010-01-23T04:56:22Z",
@@ -92,10 +92,23 @@
 				"roles": [ "admin", "user", "developer"]
 			}
 		},
-		"Mozillian": {
+		"Mozillian.org": {
 			"IAM": {
 				"created": "2010-01-23T04:56:22Z",
 				"lastUsed": "2010-01-23T04:56:22Z",
+				"roles": [ "user" ]
+			},
+			"nda": {
+				"created": "2010-01-23T04:56:22Z",
+				"lastUsed": "2010-01-23T04:56:22Z",
+				"roles": [ "user", "admin" ]
+			}
+		},
+		"Service": {
+			"5a5munnfxYjqkaN0su1Kl7USxbqkILQN": {
+				"created": "2010-01-23T04:56:22Z",
+				"lastUsed": "2010-01-23T04:56:22Z",
+				"name": "mozdef1.private.scl3.mozilla.com",
 				"roles": [ "user" ]
 			}
 		}
