@@ -9,26 +9,28 @@
 	"firstName": "john",
 	"lastName": "doe",
 	"preferredLanguage": "en_US",
-	"emails": {
-		"jdoe@mozilla.com": {
-			"primary": true,
+	"primaryEmail": "jdoe@mozilla.com",
+	"emails": [
+		{
+			"value": "jdoe@mozilla.com",
 			"verified": true,
+			"primary": true,
 			"name": "work"
 		},
-		"31337@mozilla.com": {
-			"primary": false,
+		{
+			"value": "1337@mozilla.com",
 			"verified": true,
 			"name": "work-funny"
 		}
-	},
+	],
 	"phoneNumbers": {
-		"+33169288888": {
-			"primary": false,
+		{
+			"value": "+33169288888",
 			"verified": false,
 			"name": "My French mobile phone"
 		},
-		"+14155701111": {
-			"primary": false,
+		{
+			"value": "+14155701111",
 			"verified": false,
 			"name": "USA landline"
 		}
