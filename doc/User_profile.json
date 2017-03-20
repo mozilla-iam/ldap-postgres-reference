@@ -23,7 +23,7 @@
 			"name": "work-funny"
 		}
 	],
-	"phoneNumbers": {
+	"phoneNumbers": [
 		{
 			"value": "+33169288888",
 			"verified": false,
@@ -34,8 +34,8 @@
 			"verified": false,
 			"name": "USA landline"
 		}
-	},
-	"uris": {
+	],
+	"uris": [
 		{
 			"value": "https://www.insecure.ws",
 			"primary": true,
@@ -52,34 +52,34 @@
 			"verified": true,
 			"name": "Keybase"
 		}
-	},
-	"nicknames": {
+	],
+	"nicknames": [
 		{
 			"value": "jdoe",
 			"primary": true,
 			"verified": false,
 			"name": "Mozilla IRC"
 		}
-	},
-	"SSHFingerprints": {
+	],
+	"SSHFingerprints": [
 		{
 			"value": "4096 SHA256:rlhYcDi2e98sekBwu9aaPEmr3xsg1CsS1tGXksSTSIg test (RSA)",
 			"primary": true,
 			"verified": false,
 			"name": "Mozilla SSH"
 		}
-	},
-	"PGPFingerprints": {
+	],
+	"PGPFingerprints": [
 		{
 			"value": "0x61AB87D6F66CE2FCD2D2E1F56A65DFA844722517",
 			"primary": true,
 			"verified": false,
 			"name": "Mozilla PGP"
 		}
-	},
+	],
 	"picture": "https://s.gravatar.com/avatar/...png",
 	"shirtSize": "L",
-	"membership": {
+	"membership": [
 		"MozillaCorporation": {
 			"Staff": {
 				"created": "2010-01-23T04:56:22Z",
@@ -112,5 +112,5 @@
 				"roles": [ "user" ]
 			}
 		}
-	}
+	]
 }
