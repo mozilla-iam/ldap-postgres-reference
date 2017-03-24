@@ -1,0 +1,35 @@
+title Change Integration Service
+
+participant "Mozillians.org\nWorkDay\nEtc." as input
+database "Change\nIntegration\nQueue" as cisq
+participant "Change\nIntegration\nService" as cisw
+database "User Profile Database" as profiledb
+participant "LDAP" as ldap
+participant "Auth0" as auth0
+
+==Forward flow (**write** user profile updates)==
+box over input: user-profile.json\n--user_id:...\nprimaryEmail:...--
+input->cisq: Send full (no delta) user-profile update
+cisw->cisq: pick-up next work item from queue
+cisw->cisw: validate changes
+cisw->cisw: integrate data in user profile
+consider Database store method
+cisw->profiledb: store raw requested change\n**(SQL, Git?**
+cisw->profiledb: store new version of user profile\n**(SQL, Git?)**
+end
+cisw->cisq: Send failure message if any (failed validation or integration)
+input->cisq: pick-up next failure message is any
+cisw->ldap: store new version of user profile for LDAP\n**(LDAP Call)**
+cisw->auth0: store new version of user profile in auth0 user.metadata\n**(Auth0 API Call)**
+
+==Return in-flow (**get** user profile updates on login/session refresh)==
+input->auth0: User login or session refresh (SAML, OIDC, WSFED)
+auth0->auth0: process user.metadata into user profile\n**(Auth0 rule)**
+auth0->input: New user info (id_token, SAML assertion)
+box over input: user-profile.json/xml\n--user_id:...\nprimaryEmail:...--
+
+==Return async-flow (**get** user profile update at RP's request)==
+input->auth0: Asynchronous user update request to --https:\/\/auth-dev.mozilla.auth0.com/userinfo
+auth0->auth0: process user.metadata into user profile\n**(Auth0 rule)**
+auth0->input: New user info (JSON)
+box over input: user-profile.json\n--user_id:...\nprimaryEmail:...--
