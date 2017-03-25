@@ -1,4 +1,15 @@
 {
+	"user_metadata": "AUTH0_RESERVED",
+	"clientID": "poy4bMcyxxxxxx",
+	"iss": "https://auth-dev.mozilla.auth0.com/",
+	"azp": "poy4bMcyxxxxxx",
+	"aud": "poy4bMcyxxxxxx",
+	"iat": 1490404649,
+	"exp": 1491009449,
+	"nonce": "92ksdksdfewfwfefdidfi23232odod",
+	"sub": "31337xxxx|unique",
+	"access_token": "QFeoz6kF9Aiy7mpP",
+
 	"user_id": "31337xxxx|unique",
 	"timezone": "America/Los_Angeles",
 	"active": true,
