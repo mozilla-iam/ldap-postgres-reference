@@ -1,0 +1,38 @@
+title Change Integration Service -- Kinesis Stream Concept
+
+participant "Mozillians.org\nWorkDay\nEtc." as input
+database "Change\nIntegration\nQueue" as cisq
+participant "Change\nIntegration\nService" as cisw
+database "Dynamo Table Check KinC" as checkkinc
+database "Dynamo Table LDAP Change Driver KinC" as ldapkinc
+database "Dynamo Table Auth0 Change Driver KinC" as auth0kinc
+
+participant "LDAP" as ldap
+participant "Auth0" as auth0
+
+==Forward flow (**write** user profile updates)==
+box over input: user-profile.json\n--user_id:...\nprimaryEmail:...--
+input->cisq: Send full (no delta) user-profile update
+cisw->cisq: pick-up next work item from queue
+checkkinc->cisq: validate changes and syntax add tag back to queue
+ldapkinc->ldap: propogate change to ldap or psql
+ldapkinc->cisq: add tag to item that ldap update is complete or fails
+auth0kinc->auth0: propogate change to auth0 via webtask
+auth0kinc->cisq: add tag to item that auth0 update is complete or fails
+
+auth0kinc->auth0: store new version of user profile in auth0 user.metadata\n**(Auth0 API Call)**
+
+==Return to mozillians
+cisq->mozillians: same event lifetime 24 hours with tags regarding state changes
+
+==Return in-flow (**get** user profile updates on login/session refresh)==
+input->auth0: User login or session refresh (SAML, OIDC, WSFED)
+auth0->auth0: process user.metadata into user profile\n**(Auth0 rule)**
+auth0->input: New user info (id_token, SAML assertion)
+box over input: user-profile.json/xml\n--user_id:...\nprimaryEmail:...--
+
+==Return async-flow (**get** user profile update at RP's request)==
+input->auth0: Asynchronous user update request to --https:\/\/auth-dev.mozilla.auth0.com/userinfo
+auth0->auth0: process user.metadata into user profile\n**(Auth0 rule)**
+auth0->input: New user info (JSON)
+box over input: user-profile.json\n--user_id:...\nprimaryEmail:...--
