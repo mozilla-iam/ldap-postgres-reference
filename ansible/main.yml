@@ -1,8 +1,8 @@
-- hosts: postgres
+- hosts: localhost 
   gather_facts: no
 
-- hosts: ldap
-  gather_facts: no
+  become_user: root
+  become: true
 
   vars_files:
     - vars.yml
@@ -12,7 +12,11 @@
       yum: name=vim,epel-release state=latest
 
     - name: Install ldap packages
-      yum: name=openldap,openldap-servers-sql state=latest
+      yum: name=openldap,openldap-devel,openldap-servers-sql state=latest
+
+    - name: Install python ldap
+      pip: 
+        name: python-ldap 
 
     - name: Install odbc
       yum: name=unixODBC state=latest
@@ -34,3 +38,42 @@
 
     - name: Add the entrypoint
       template: src=../ldap/entrypoint.sh.j2 dest=/root/entrypoint.sh owner=root group=root mode=0774
+
+    - name: Add the pgpass file to root user
+      template: src=../ldap/pgpass.j2 dest=/root/.pgpass owner=root group=root mode=0600
+
+    - name: Create the initial LDAP schema
+      become_user: root
+      become: true
+      shell: psql -h {{ postgres_server }} -U {{ postgres_user }} {{ database_name }} -w < /root/backsql_create.sql
+
+    - name: Blow away default schema
+      become_user: root
+      become: true
+      shell: rm -rf /etc/openldap/slapd.d/*
+
+    - name: Create initial ldap config
+      become_user: root
+      become: true
+      shell: slaptest -f /etc/openldap/slapd.conf -F /etc/openldap/slapd.d/
+    
+    - name: ensure proper ldap owner
+      file:
+        path: /etc/openldap
+        state: directory
+        mode: 0700
+        recurse: true
+        owner: ldap
+        group: ldap
+
+    - name: start slapd
+      service:
+        name: slapd
+        state: running
+        enabled: true
+
+    - name: bind to ldap
+      ldap_auth:
+        server_uri: "ldap://localhost/"
+        bind_dn: "cn=root,{{ ldap_base }}"
+        bind_pw: "{{ ldap_admin_password }}"

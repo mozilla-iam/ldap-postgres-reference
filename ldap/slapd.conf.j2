@@ -17,8 +17,8 @@ access to * by dn="cn=root,{{ ldap_base }}" write
 # service AND an understanding of referrals.
 #referral       ldap://root.openldap.org
 
-pidfile         /usr/local/var/slapd.pid
-argsfile        /usr/local/var/slapd.args
+pidfile         /var/run/openldap/slapd.pid
+argsfile        /var/run/openldap/slapd.args
 
 #######################################################################
 # Load LDAP Modules for back-sql
@@ -36,8 +36,8 @@ suffix         "{{ ldap_base }}"
 rootdn         "cn=root,{{ ldap_base }}"
 rootpw          {{ ldap_admin_password }}
 dbname          PgSQL
-dbuser          postgres
-dbpasswd        postgres
+dbuser          {{ postgres_user }}
+dbpasswd        {{ postgres_password }}
 insentry_stmt  "insert into ldap_entries (id,dn,oc_map_id,parent,keyval) values ((select max(id)+1 from ldap_entries),?,?,?,?)"
 upper_func      "upper"
 strcast_func    "text"

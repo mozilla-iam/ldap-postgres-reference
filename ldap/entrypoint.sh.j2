@@ -3,6 +3,5 @@
 echo "Sleeping to allow postgres time to get ready."
 sleep 10
 
-createdb -U postgres -h postgres ldap
-psql -U postgres -h postgres ldap < /root/backsql_create.sql
+psql -U {{ postgres_user }} -h {{ postgres_server }} {{ database_name }} < /root/backsql_create.sql
 slapd -d 1 -f /etc/openldap/slapd.conf
