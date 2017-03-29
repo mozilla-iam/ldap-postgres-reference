@@ -1,0 +1,3 @@
+- [ ] Attach instance profile to instance
+- [ ] Sometimes default route isn't created
+- [ ] Finish IAM policies
