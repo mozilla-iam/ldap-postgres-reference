@@ -1,0 +1,7 @@
+ldap_base: dc=allizom,dc=org
+ldap_admin_password: changeme
+
+postgres_server: foo.bar.us-west-2.rds.amazonaws.com
+postgres_user: your_user
+postgres_password: your_pass
+database_name: your_database
