@@ -1,0 +1,287 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "MozillaLDAP LDAP Platform: RDS Database Stack"
+Parameters:
+  RdsMasterUsername:
+    Description: Username for Postgres admin user
+    Type: String
+    Default: MozillaLDAP
+  RdsMasterPassword:
+    Description: Password for Postgres admin user
+    Type: String
+    NoEcho: "true"
+  RdsInstanceType:
+    Description: Instance type to use for RDS database
+    Type: String
+    Default: db.m3.medium
+  RdsStorage:
+    Description: Space in GB to allocate for database storage
+    Type: Number
+    Default: "20"
+  RdsBackupRetention:
+    Description: Number of days to retain automatic RDS backups
+    Type: Number
+    Default: "30"
+  RdsMultiAZ:
+    Description: Configure multi-AZ failover HA - requires 2 or more subnet IDs to be defined
+    Type: String
+    AllowedValues:
+    - "false"
+    - "true"
+    Default: "false"
+  DatabaseUrlExport:
+    Description: Name to use for MozillaLDAP database URL export
+    Type: String
+    MinLength: "1"
+    Default: MozillaLDAPRdsDatabaseUrl
+  SecurityGroupExport:
+    Description: Name to use for security group export
+    Type: String
+    MinLength: "1"
+    Default: MozillaLDAPRdsSecurityGroup
+  SSHKeyName:
+    Description: Name of the existing ssh key that should have access
+    Type: String
+    MinLength: "1"
+    Default: akrug-key
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: AWS Global Configuration
+      Parameters:
+      - DatabaseUrlExport
+      - SecurityGroupExport
+    - Label:
+        default: Instance Configuration
+      Parameters:
+      - SSHKeyName
+    - Label:
+        default: Database Configuration
+      Parameters:
+      - RdsMasterUsername
+      - RdsMasterPassword
+      - RdsInstanceType
+      - RdsStorage
+      - RdsBackupRetention
+      - RdsMultiAZ
+    ParameterLabels:
+      DatabaseUrlExport:
+        default: Database URL Export Name
+      SecurityGroupExport:
+        default: Security Group Export Name
+      RdsMasterUsername:
+        default: RDS Username
+      RdsMasterPassword:
+        default: RDS Password
+      RdsInstanceType:
+        default: DB Instance Type
+      RdsStorage:
+        default: Storage (GB)
+      RdsBackupRetention:
+        default: Backup Retention (Days)
+      RdsMultiAZ:
+        default: Multi-AZ HA
+Resources:
+  MozillaLDAPInternetGateway:
+    Type: "AWS::EC2::InternetGateway"
+  MozillaLDAPVPC:
+    Type: "AWS::EC2::VPC"
+    DependsOn: MozillaLDAPInternetGateway
+    Properties:
+      CidrBlock: "10.0.0.0/16"
+      EnableDnsSupport: True
+      EnableDnsHostnames: True
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    DependsOn: MozillaLDAPVPC
+    Properties:
+      VpcId:
+        Ref: MozillaLDAPVPC
+      InternetGatewayId:
+        Ref: MozillaLDAPInternetGateway
+  MozillaLDAPSubnet1:
+    Type: "AWS::EC2::Subnet"
+    DependsOn: MozillaLDAPVPC
+    Properties:
+      AvailabilityZone: "us-west-2a"
+      CidrBlock: "10.0.0.0/24"
+      MapPublicIpOnLaunch: True
+      VpcId:
+        Ref: MozillaLDAPVPC
+  MozillaLDAPSubnet2:
+    Type: "AWS::EC2::Subnet"
+    DependsOn: MozillaLDAPVPC
+    Properties:
+      AvailabilityZone: "us-west-2b"
+      CidrBlock: "10.0.1.0/24"
+      MapPublicIpOnLaunch: True
+      VpcId:
+        Ref: MozillaLDAPVPC
+  MozillaLDAPRouteTable:
+    Type: "AWS::EC2::RouteTable"
+    DependsOn: [ MozillaLDAPVPC, MozillaLDAPInternetGateway, AttachGateway ]
+    Properties:
+      VpcId:
+        Ref: MozillaLDAPVPC
+  MozillaLDAPSecGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    DependsOn: MozillaLDAPVPC
+    Properties:
+      GroupDescription: "Allows ports to ldap instance."
+      VpcId:
+        Ref: MozillaLDAPVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '389'
+          ToPort: '389'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+  RdsSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    DependsOn: [ MozillaLDAPSubnet1, MozillaLDAPSubnet2 ]
+    Properties:
+      DBSubnetGroupDescription: MozillaLDAP Database
+      SubnetIds:
+        - Ref: MozillaLDAPSubnet1
+        - Ref: MozillaLDAPSubnet2
+  RdsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: MozillaLDAP RDS Security Group
+      VpcId:
+        Ref: MozillaLDAPVPC
+      Tags:
+      - Key: Name
+        Value: MozillaLDAP-rds
+  RdsEgressAny:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId:
+        Ref: RdsSecurityGroup
+      FromPort: -1
+      ToPort: -1
+      IpProtocol: -1
+      CidrIp: 0.0.0.0/0
+  RdsIngressICMP:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId:
+        Ref: RdsSecurityGroup
+      FromPort: -1
+      ToPort: -1
+      IpProtocol: 1
+      CidrIp: 0.0.0.0/0
+  RdsIngressPG:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId:
+        Ref: RdsSecurityGroup
+      FromPort: 5432
+      ToPort: 5432
+      IpProtocol: tcp
+      CidrIp: 10.0.0.0/8
+  RdsDatabase:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: !Ref RdsStorage
+      BackupRetentionPeriod: !Ref RdsBackupRetention
+      DBName: MozillaLDAP
+      DBInstanceClass: !Ref RdsInstanceType
+      DBSubnetGroupName: !Ref RdsSubnetGroup
+      Engine: postgres
+      MultiAZ: !Ref RdsMultiAZ
+      StorageType: gp2
+      VPCSecurityGroups:
+      - !Ref RdsSecurityGroup
+      MasterUsername: !Ref RdsMasterUsername
+      MasterUserPassword: !Ref RdsMasterPassword
+      Tags:
+      - Key: Name
+        Value: MozillaLDAP
+    DefaultRoute:
+      Type: AWS::EC2::Route
+      DependsOn: [ MozillaLDAPRouteTable, MozillaLDAPInternetGateway, AttachGateway ]
+      Properties:
+        RouteTableId:
+          Ref: MozillaLDAPRouteTable
+        DestinationCidrBlock: 0.0.0.0/0
+        GatewayId:
+          Ref: MozillaLDAPInternetGateway
+  CISRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      RoleName: CIS-Instances
+  CISInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    DependsOn: CISRole
+    Properties:
+      Roles:
+        -
+          Ref: CISRole
+      InstanceProfileName: CIS-Instances
+  CISStreamWrite:
+    Type: "AWS::IAM::Policy"
+    DependsOn: CISRole
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action: "*"
+            Resource: arn:aws:kinesis:*:*:stream/ChangeIntegrationStream
+      PolicyName: CIS-stream-write
+      Roles:
+        -
+          Ref: CISRole
+  LDAPInstance:
+    Type: "AWS::EC2::Instance"
+    DependsOn: MozillaLDAPSecGroup
+    Properties:
+      AvailabilityZone: 'us-west-2b'
+      ImageId: ami-d2c924b2
+      InstanceInitiatedShutdownBehavior: terminate
+      InstanceType: t2.medium
+      KeyName: !Ref SSHKeyName
+      SecurityGroupIds:
+        -
+          "Fn::GetAtt": [ MozillaLDAPSecGroup, GroupId ]
+      SubnetId: !Ref MozillaLDAPSubnet2
+      Tags:
+        - Key: Project
+          Value: IAM
+  CISStream:
+    Type: "AWS::Kinesis::Stream"
+    Properties:
+      Name: ChangeIntegrationStream
+      ShardCount: 1
+Outputs:
+  MozillaLDAPRdsDatabase:
+    Value: !Ref RdsDatabase
+  MozillaLDAPRdsDatabaseUrl:
+    Value: !Sub "postgresrl://${RdsMasterUsername}:${RdsMasterPassword}@${RdsDatabase.Endpoint.Address}:${RdsDatabase.Endpoint.Port}/MozillaLDAP"
+    Export:
+      Name: !Ref DatabaseUrlExport
+  MozillaLDAPRdsSecurityGroup:
+    Value: !Ref RdsSecurityGroup
+    Export:
+      Name: !Ref SecurityGroupExport
+  CISStreamARN:
+    Value:
+      "Fn::GetAtt": [ CISStream, Arn ]
+  InstanceId:
+    Value:
+      "Ref": "LDAPInstance"
