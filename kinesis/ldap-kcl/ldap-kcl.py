@@ -109,7 +109,7 @@ class RecordProcessor(processor.RecordProcessorBase):
         """
         try:
             for record in process_records_input.records:
-                print(record)
+                print(record.binary_data)
                 data = record.binary_data
                 seq = int(record.sequence_number)
                 sub_seq = record.sub_sequence_number
