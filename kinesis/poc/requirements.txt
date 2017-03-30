@@ -1,0 +1,5 @@
+boto3
+pytest
+nose
+nose-watch
+Faker
