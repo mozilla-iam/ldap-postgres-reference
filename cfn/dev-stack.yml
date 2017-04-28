@@ -84,6 +84,10 @@ Metadata:
 Resources:
   MozillaLDAPInternetGateway:
     Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: MozillaLDAP-rds
   MozillaLDAPVPC:
     Type: "AWS::EC2::VPC"
     DependsOn: MozillaLDAPInternetGateway
@@ -91,6 +95,9 @@ Resources:
       CidrBlock: "10.0.0.0/16"
       EnableDnsSupport: True
       EnableDnsHostnames: True
+      Tags:
+        - Key: Name
+          Value: MozillaLDAP-rds
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     DependsOn: MozillaLDAPVPC
@@ -108,6 +115,9 @@ Resources:
       MapPublicIpOnLaunch: True
       VpcId:
         Ref: MozillaLDAPVPC
+      Tags:
+        - Key: Name
+          Value: MozillaLDAP-rds Subnet 1
   MozillaLDAPSubnet2:
     Type: "AWS::EC2::Subnet"
     DependsOn: MozillaLDAPVPC
@@ -117,6 +127,9 @@ Resources:
       MapPublicIpOnLaunch: True
       VpcId:
         Ref: MozillaLDAPVPC
+      Tags:
+        - Key: Name
+          Value: MozillaLDAP-rds Subnet 2
   MozillaLDAPRouteTable:
     Type: "AWS::EC2::RouteTable"
     DependsOn: [ MozillaLDAPVPC, MozillaLDAPInternetGateway, AttachGateway ]
@@ -139,6 +152,9 @@ Resources:
           FromPort: '22'
           ToPort: '22'
           CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: MozillaLDAP-rds LDAP
   RdsSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     DependsOn: [ MozillaLDAPSubnet1, MozillaLDAPSubnet2 ]
@@ -147,6 +163,9 @@ Resources:
       SubnetIds:
         - Ref: MozillaLDAPSubnet1
         - Ref: MozillaLDAPSubnet2
+      Tags:
+        - Key: Name
+          Value: MozillaLDAP-rds
   RdsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -155,7 +174,7 @@ Resources:
         Ref: MozillaLDAPVPC
       Tags:
       - Key: Name
-        Value: MozillaLDAP-rds
+        Value: MozillaLDAP-rds RDS
   RdsEgressAny:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
@@ -199,8 +218,8 @@ Resources:
       MasterUsername: !Ref RdsMasterUsername
       MasterUserPassword: !Ref RdsMasterPassword
       Tags:
-      - Key: Name
-        Value: MozillaLDAP
+        - Key: Name
+          Value: MozillaLDAP-rds
     DefaultRoute:
       Type: AWS::EC2::Route
       DependsOn: [ MozillaLDAPRouteTable, MozillaLDAPInternetGateway, AttachGateway ]
@@ -263,6 +282,8 @@ Resources:
       Tags:
         - Key: Project
           Value: IAM
+        - Key: Name
+          Value: MozillaLDAP-rds LDAP
   CISStream:
     Type: "AWS::Kinesis::Stream"
     Properties:
