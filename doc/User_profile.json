@@ -79,56 +79,35 @@
 	],
 	"picture": "https://s.gravatar.com/avatar/...png",
 	"shirtSize": "L",
-	"membership": {
-		"Workday": [
+	"groups": [
+		"ldapGroup1",
+		"mozillian_MozGroup1",
+		"workday_EIS1"
+	],
+	"authoritativeGroups": [
 			{
 				"created": "2010-01-23T04:56:22Z",
 				"lastUsed": "2010-01-23T04:56:22Z",
-				"name": "Staff",
-				"uuid": "xxxx1",
-				"roles": [ "user" ]
+				"name": "moco",
+				"uuid": "reserved_mozilla_1"
 			},
 			{
 				"created": "2010-01-23T04:56:22Z",
 				"lastUsed": "2010-01-23T04:56:22Z",
-				"name": "Enterprise Information Security",
-				"uuid": "xxxx2",
-				"roles": [ "user" ]
-			}
-		],
-		"LDAP": [
-			{
-				"created": "2010-01-23T04:56:22Z",
-				"lastUsed": "2010-01-23T04:56:22Z",
-				"name": "posixSysadmins",
-				"uuid": "xxxx1",
-				"roles": [ "admin", "user", "developer"]
-			}
-		],
-		"Mozillian.org": [
-			{
-				"created": "2010-01-23T04:56:22Z",
-				"lastUsed": "2010-01-23T04:56:22Z",
-				"name": "IAM",
-				"uuid": "xxxx1",
-				"roles": [ "user" ]
+				"name": "mofo",
+				"uuid": "reserved_mozilla_2"
 			},
 			{
 				"created": "2010-01-23T04:56:22Z",
 				"lastUsed": "2010-01-23T04:56:22Z",
 				"name": "nda",
-				"uuid": "xxxx2",
-				"roles": [ "user", "admin" ]
-			}
-		],
-		"Service": [
+				"uuid": "reserved_mozilla_3"
+			},
 			{
 				"created": "2010-01-23T04:56:22Z",
 				"lastUsed": "2010-01-23T04:56:22Z",
 				"name": "mozdef1.private.scl3.mozilla.com",
-				"uuid": "5a5munnfxYjqkaN0su1Kl7USxbqkILQN",
-				"roles": [ "user" ]
+				"uuid": "5a5munnfxYjqkaN0su1Kl7USxbqkILQN"
 			}
 		]
-	}
 }
