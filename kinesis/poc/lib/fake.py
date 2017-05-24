@@ -11,7 +11,7 @@ class User(object):
 
     def user_id(self):
         """Returns single attribute of user_id."""
-        return self.profile['username']
+        return self.profile['username']+"|auth0|fake"
 
     def timezone(self):
         """Returns single attribute of tz."""
@@ -19,11 +19,11 @@ class User(object):
 
     def lastModified(self):
         """Returns current ts in zulu time."""
-        return self.fake.date_time(tzinfo=None)
+        return self.fake.date_time(tzinfo=None).isoformat()
 
     def created(self):
         """Returns ts in zulu time."""
-        return self.fake.date_time(tzinfo=None)
+        return self.fake.date_time(tzinfo=None).isoformat()
 
     def username(self):
         """Returns random username."""
@@ -128,7 +128,14 @@ class User(object):
             }
         ],
         """
-        return []
+        return [
+                {
+                    "value": self.profile['username'],
+                    "primary": "true",
+                    "verified": "false",
+                    "name": "Mozilla IRC"
+                }
+                ]
 
     def SSHFingerprints(self):
         """
@@ -142,7 +149,14 @@ class User(object):
             ],
 
         """
-        return []
+        return [
+                {
+                    "value": "4096 SHA256:rlhYcDi2e98sekBwu9aaPEmr3xsg1CsS1tGXksSTSIg test (RSA)",
+                    "primary": "true",
+                    "verified": "false",
+                    "name": "Mozilla SSH"
+                }
+            ]
 
     def PGPFingerprints(self):
         """
@@ -163,52 +177,45 @@ class User(object):
     def shirtSize(self):
         return "xs"
 
-    def membership(self):
-        """Return list of dicts.
-            "Mozillian.org": [
+    def groups(self):
+        """Return a list of groups - if there is a leading identifier delimited
+        by a '_' then this identifier is the identity publisher's identifier"""
+        return ['ldapGroup1', 'mozillians_MozGroup1', 'workday_EIS1']
+
+    def authoritativeGroups(self):
+        """Return a list of dict of authoritative groups"""
+        return [
                 {
                     "created": "2010-01-23T04:56:22Z",
                     "lastUsed": "2010-01-23T04:56:22Z",
-                    "name": "IAM",
-                    "uuid": "xxxx1",
-                    "roles": [ "user" ]
-                    },
-        """
-        return {
-            "Workday": [{
-                "created": "2010-01-23T04:56:22Z",
-                "lastUsed": "2010-01-23T04:56:22Z",
-                "name": "IAM",
-                "uuid": "xxxx1",
-                "roles": ["user"]
-            }],
-            "LDAP": [{
-                "created": "2010-01-23T04:56:22Z",
-                "lastUsed": "2010-01-23T04:56:22Z",
-                "name": "IAM",
-                "uuid": "xxxx1",
-                "roles": ["user"]
-            }],
-            "Mozillianorg": [{
-                "created": "2010-01-23T04:56:22Z",
-                "lastUsed": "2010-01-23T04:56:22Z",
-                "name": "IAM",
-                "uuid": "xxxx1",
-                "roles": ["user"]
-            }],
-        }
-
-
-    def enriched_profile(self):
-        return {
-                "app_metadata": {
-                    "invalid": "invalid bug work around"
+                    "name": "moco.allizom.org",
+                    "uuid": "sd92SkdkdwobjazUIUUsksowooKq"
                 },
+                {
+                    "created": "2011-01-23T04:56:22Z",
+                    "lastUsed": "2012-01-23T04:56:22Z",
+                    "name": "mozdef1.private.scl3.mozilla.com",
+                    "uuid": "5a5munnfxYjqkaN0su1Kl7USxbqkILQN"
+                },
+                {
+                    "created": "2016-01-23T04:56:22Z",
+                    "lastUsed": "2017-01-23T04:56:22Z",
+                    "name": "NDA",
+                    "uuid": "reserved_mozilla_1"
+                }
+            ]
+
+    def enriched_profile(self, from_authzero=False):
+        """Pass from_authzero=True to get the full auth0 profile data with
+        OIDC specific claims"""
+        user = {
+                "user_id": self.user_id(),
                 "timezone": self.timezone(),
-                "username": self.primaryEmail(),
-                "displayName": self.displayName(),
+                "active": 'true',
                 "lastModified": self.lastModified(),
                 "created": self.created(),
+                "userName": self.primaryEmail(),
+                "displayName": self.displayName(),
                 "firstName": self.firstName(),
                 "lastName": self.lastName(),
                 "preferredLanguage": self.preferredLanguage(),
@@ -221,9 +228,27 @@ class User(object):
                 "PGPFingerprints": self.PGPFingerprints(),
                 "picture": self.picture(),
                 "shirtSize": self.shirtSize(),
-                "membership": self.membership(),
-                "active": 'true'
+                "groups": self.groups(),
+                "authoritativeGroups": self.authoritativeGroups(),
             }
+
+        if from_authzero:
+            authzero_user = {
+                    "user_metadata": "AUTH0_RESERVED",
+                    "app_metadata": "AUTH0_RESERVED",
+                    "clientID": "poy4bMcyxxxxxx",
+                    "iss": "https://auth-dev.mozilla.auth0.com/",
+                    "azp": "poy4bMcyxxxxxx",
+                    "aud": "poy4bMcyxxxxxx",
+                    "iat": 1490404649,
+                    "exp": 1491009449,
+                    "nonce": "92ksdksdfewfwfefdidfi23232odod",
+                    "sub": "31337xxxx|unique",
+                    "access_token": "QFeoz6kF9Aiy7mpP",
+                    }
+            user.update(authzero_user)
+
+        return user
 
 if __name__ == "__main__":
     u = User()
